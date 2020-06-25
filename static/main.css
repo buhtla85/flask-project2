@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.title {
+    width: 5rem;
+    height: 5px;
+    margin: 0 auto;
+    background: #4CAF50;
+}
