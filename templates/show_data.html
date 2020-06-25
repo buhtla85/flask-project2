@@ -6,34 +6,14 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-          <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">{{text}}</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">Special title treatment</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-      </div>
+        
+        {% from 'card_macro.html' import card with context %}
+
+        {{ card('Confirmed', numConf) }}
+        {{ card('Recovered', numRec) }}
+        {{ card('Death', numDeat) }}
+        
+    </div>
 </div>
 
 
