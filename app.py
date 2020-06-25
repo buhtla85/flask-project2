@@ -9,16 +9,26 @@ app = Flask(__name__)
 @app.route('/')
 def fetch_data():
     r = requests.get("https://covid19.mathdro.id/api")
+    
     jsonData = r.json()
-    confirmed = jsonData["confirmed"]
-    numberOfConfirmed = confirmed["value"]
-    recovered = jsonData["recovered"]
-    numberOfRecovered = recovered["value"]
-    deaths = jsonData["deaths"]
-    numberOfDeaths = deaths["value"]
+    confirmed = jsonData["confirmed"]["value"]
+    recovered = jsonData["recovered"]["value"]
+    deaths = jsonData["deaths"]["value"]
+
     if len(jsonData) == 0:
-        return "No data here!"
+        # maybe there should be some error page html...
+        return "No data here!" 
     else:
-        print(jsonData)
-        return render_template("show_data.html", numConf=numberOfConfirmed, numRec=numberOfRecovered, numDeat=numberOfDeaths)
+        fetch_countries()
+        return render_template("show_data.html", numConf=confirmed, numRec=recovered, numDeat=deaths)
+
+def fetch_countries():
+    r_countries = requests.get("https://covid19.mathdro.id/api/countries")
+    jsonCountries = r_countries.json()
+    countriesList = [c["name"] for c in jsonCountries["countries"]]
+    # print(countriesList)
+    
+        
+
+        
     
