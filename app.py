@@ -19,16 +19,16 @@ def fetch_data():
         # maybe there should be some error page html...
         return "No data here!" 
     else:
-        fetch_countries()
-        return render_template("show_data.html", numConf=confirmed, numRec=recovered, numDeat=deaths)
+        selectElemList = fetch_countries()
+        return render_template("show_data.html", numConf=confirmed, numRec=recovered, numDeat=deaths, selItems=selectElemList)
+
+
 
 def fetch_countries():
     r_countries = requests.get("https://covid19.mathdro.id/api/countries")
     jsonCountries = r_countries.json()
     countriesList = [c["name"] for c in jsonCountries["countries"]]
-    # print(countriesList)
-    
-        
+    return countriesList
 
         
     
