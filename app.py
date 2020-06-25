@@ -12,10 +12,13 @@ def fetch_data():
     jsonData = r.json()
     confirmed = jsonData["confirmed"]
     numberOfConfirmed = confirmed["value"]
+    recovered = jsonData["recovered"]
+    numberOfRecovered = recovered["value"]
+    deaths = jsonData["deaths"]
+    numberOfDeaths = deaths["value"]
     if len(jsonData) == 0:
         return "No data here!"
     else:
         print(jsonData)
-        print(numberOfConfirmed)
-        return render_template("show_data.html", text="Succesfully fetched data!")
+        return render_template("show_data.html", numConf=numberOfConfirmed, numRec=numberOfRecovered, numDeat=numberOfDeaths)
     
