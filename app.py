@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import requests
 
 app = Flask(__name__)
@@ -17,5 +17,5 @@ def fetch_data():
     else:
         print(jsonData)
         print(numberOfConfirmed)
-        return "Succesfully fetched data!"
+        return render_template("show_data.html", text="Succesfully fetched data!")
     
