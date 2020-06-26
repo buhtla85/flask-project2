@@ -3,6 +3,8 @@ import requests
 
 app = Flask(__name__)
 
+# app.debug = True
+
 
 # the idea is to fetch data (global numbers) and display them in cards and some type of chart
 # also, the home page should have a dropdown menu for list of countries. The function should fetch the list of countries and save them in dropdown.
@@ -20,7 +22,10 @@ def fetch_data():
         return "No data here!" 
     else:
         selectElemList = fetch_countries()
-        return render_template("show_data.html", numConf=confirmed, numRec=recovered, numDeat=deaths, selItems=selectElemList)
+        elapsedTime = fetch_daily_time()
+        dailyConfirmed = fetch_daily_confirmed()
+        dailyDeaths = fetch_daily_deaths()
+        return render_template("show_data.html", numConf=confirmed, numRec=recovered, numDeat=deaths, selItems=selectElemList, timeData=elapsedTime, dailyConfirmed=dailyConfirmed, dailyDeaths=dailyDeaths)
 
 
 
@@ -30,5 +35,24 @@ def fetch_countries():
     countriesList = [c["name"] for c in jsonCountries["countries"]]
     return countriesList
 
+# basicaly, this function does not need to be different for every call because this is constant (when user submits form)
+def fetch_daily_time():
+    r_daily = requests.get("https://covid19.mathdro.id/api/daily")
+    jsonDaily = r_daily.json()
+    reportDate = [d["reportDate"] for d in jsonDaily]
+    return reportDate
+
         
+def fetch_daily_confirmed():
+    r_confirmed = requests.get("https://covid19.mathdro.id/api/daily")
+    jsonConfirmed = r_confirmed.json()
+    totalConfirmed = [t["totalConfirmed"] for t in jsonConfirmed]
+    return totalConfirmed
+
+def fetch_daily_deaths():
+    r_deaths = requests.get("https://covid19.mathdro.id/api/daily")
+    jsonDeaths = r_deaths.json()
+    totalDeaths = [d["deaths"] for d in jsonDeaths]
+    justDeaths = [j["total"] for j in totalDeaths]
+    return justDeaths
     
