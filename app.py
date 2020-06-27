@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 
 app = Flask(__name__)
@@ -8,14 +8,26 @@ app = Flask(__name__)
 
 # the idea is to fetch data (global numbers) and display them in cards and some type of chart
 # also, the home page should have a dropdown menu for list of countries. The function should fetch the list of countries and save them in dropdown.
-@app.route('/')
-def fetch_data():
+@app.route('/global', methods=["GET","POST"])
+def globaldata():
     r = requests.get("https://covid19.mathdro.id/api")
     
     jsonData = r.json()
     confirmed = jsonData["confirmed"]["value"]
     recovered = jsonData["recovered"]["value"]
     deaths = jsonData["deaths"]["value"]
+    if request.method == "POST":
+        select = request.form.get('country')
+        r_country = requests.get("https://covid19.mathdro.id/api/countries/" + select)
+        # /api/countries/[country]/og: generate a summary open graph image for a [country]
+        country_img = "https://covid19.mathdro.id/api/countries/" + select + "/og"
+        jsonCountry = r_country.json()
+        countryConfirmed = jsonCountry["confirmed"]["value"]
+        countryRecovered = jsonCountry["recovered"]["value"]
+        countryDeaths = jsonCountry["deaths"]["value"]
+        selectElList = fetch_countries()
+        elapsTime = fetch_daily_time()
+        return render_template("single_country.html", title=select, numConf=countryConfirmed, numRec=countryRecovered, numDeat=countryDeaths, selItems=selectElList, apiImg=country_img)
 
     if len(jsonData) == 0:
         # maybe there should be some error page html...
@@ -25,7 +37,7 @@ def fetch_data():
         elapsedTime = fetch_daily_time()
         dailyConfirmed = fetch_daily_confirmed()
         dailyDeaths = fetch_daily_deaths()
-        return render_template("show_data.html", numConf=confirmed, numRec=recovered, numDeat=deaths, selItems=selectElemList, timeData=elapsedTime, dailyConfirmed=dailyConfirmed, dailyDeaths=dailyDeaths)
+        return render_template("show_data.html", title="Global", numConf=confirmed, numRec=recovered, numDeat=deaths, selItems=selectElemList, timeData=elapsedTime, dailyConfirmed=dailyConfirmed, dailyDeaths=dailyDeaths)
 
 
 
@@ -34,6 +46,7 @@ def fetch_countries():
     jsonCountries = r_countries.json()
     countriesList = [c["name"] for c in jsonCountries["countries"]]
     return countriesList
+    
 
 # basicaly, this function does not need to be different for every call because this is constant (when user submits form)
 def fetch_daily_time():
