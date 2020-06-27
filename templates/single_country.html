@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}CoronaStats{% endblock %}
+
+{% block content %} 
+
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">Coronavirus stats</a>
+        
+        <form class="form-inline my-2 my-lg-0" method="POST"  action="{{ url_for('.globaldata') }}">
+            <label for="sel1" class="mr-sm-2">Select country:</label>
+            <select class="form-control mr-sm-2" id="sel1" name="country">
+                {% for item in selItems %}
+                    <option  value="{{item}}">{{item}}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Show data</button>
+        </form> 
+        
+    </nav>    
+
+    <div class="container">
+        <h3 class="text-center pt-3">{{title}}</h3>
+        <div class="title"></div>
+        <div class="row">
+            
+            {% from 'card_macro.html' import card with context %}
+
+            {{ card('Confirmed', numConf) }}
+            {{ card('Recovered', numRec) }}
+            {{ card('Death', numDeat) }}
+            
+        </div>
+
+        <div class="showImage">
+            <img src="{{apiImg}}" alt="country stats" style="width: 100%;">
+        </div>
+    </div>
+
+
+{% endblock %}
+
