@@ -15,4 +15,9 @@
 #chart {
     max-width: 650px;
     margin: 35px auto;
-  }
+}
+
+.showImage {
+    max-width: 650px;
+    margin: 35px auto;
+}
